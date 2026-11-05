@@ -289,7 +289,7 @@ contactModal.addEventListener("click", (event) => {
 /* === COUNT UP (IntersectionObserver) === */
 const runCount = (el) => {
   const target = parseInt(el.dataset.count || "0", 10);
-  const duration = 1500;
+  const duration = 2400;
   const startTime = performance.now();
 
   const tick = (now) => {
@@ -428,15 +428,15 @@ const initSkillBars = () => {
               if (!fill) return;
 
               const targetLevel = parseInt(fill.dataset.level || "0", 10);
-              const staggerDelay = idx * 120; // 120ms stagger per skill
+              const staggerDelay = idx * 160; // 120ms stagger per skill
 
               setTimeout(() => {
-                fill.style.transition = "width 1.6s cubic-bezier(0.22, 1, 0.36, 1)";
+                fill.style.transition = "width 2.4s cubic-bezier(0.22, 1, 0.36, 1)";
                 fill.style.width = `${targetLevel}%`;
                 fill.classList.add("animated");
 
                 if (pctEl) {
-                  const duration = 1600;
+                  const duration = 2400;
                   const startTime = performance.now();
                   const animatePct = (now) => {
                     const elapsed = now - startTime;
@@ -455,7 +455,7 @@ const initSkillBars = () => {
                 }
               }, staggerDelay);
             });
-          }, 400);
+          }, 650);
 
           skillObserver.unobserve(entry.target);
         }
