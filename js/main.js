@@ -314,25 +314,162 @@ const initCount = () => {
   document.querySelectorAll(".count-up").forEach((el) => countObserver.observe(el));
 };
 
-/* === SKILL BARS (IntersectionObserver) === */
-const initSkillBars = () => {
-  const skillObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const fills = entry.target.querySelectorAll(".skill-fill");
-        fills.forEach((fill) => {
-          const level = fill.dataset.level || "0";
-          setTimeout(() => {
-            fill.style.width = `${level}%`;
-            fill.classList.add("animated");
-          }, 200);
-        });
-        skillObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
 
-  document.querySelectorAll(".expertise-category").forEach((cat) => skillObserver.observe(cat));
+/* === LENIS SMOOTH SCROLL === */
+let lenisInstance = null;
+const initLenis = () => {
+  if (typeof Lenis === "undefined") return;
+
+  try {
+    lenisInstance = new Lenis({
+      duration: 1.25,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.5,
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenisInstance.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    lenisInstance.on("scroll", () => {
+      onScroll();
+      setActiveNav();
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        const href = this.getAttribute("href");
+        if (href && href !== "#" && href.startsWith("#")) {
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            lenisInstance.scrollTo(target, { offset: -60, duration: 1.3 });
+            if (typeof mobileNav !== "undefined" && mobileNav && mobileNav.classList.contains("active")) {
+              if (typeof toggleNav === "function") toggleNav();
+            }
+          }
+        }
+      });
+    });
+  } catch (err) {
+    console.warn("Lenis error:", err);
+  }
+};
+
+/* === HERO DYNAMIC TYPEWRITER === */
+const initHeroTypewriter = () => {
+  const el = document.getElementById("hero-typewriter");
+  if (!el) return;
+
+  const roles = [
+    "AI Automation Specialist",
+    "Machine Learning Engineer",
+    "Deep Learning Practitioner",
+    "n8n Workflow Architect",
+    "Scalable Systems Builder"
+  ];
+
+  let roleIdx = 0;
+  let charIdx = roles[0].length;
+  let isDeleting = true;
+
+  // Let initial title stay for 2.2s so user can read it first
+  setTimeout(() => {
+    typeLoop();
+  }, 2200);
+
+  function typeLoop() {
+    const current = roles[roleIdx];
+
+    if (isDeleting) {
+      charIdx--;
+      el.textContent = current.substring(0, charIdx);
+      if (charIdx <= 0) {
+        isDeleting = false;
+        roleIdx = (roleIdx + 1) % roles.length;
+        setTimeout(typeLoop, 380);
+        return;
+      }
+      setTimeout(typeLoop, 30);
+    } else {
+      charIdx++;
+      el.textContent = current.substring(0, charIdx);
+      if (charIdx >= current.length) {
+        isDeleting = true;
+        setTimeout(typeLoop, 2200);
+        return;
+      }
+      setTimeout(typeLoop, 65);
+    }
+  }
+};
+
+/* === SKILL BARS (IntersectionObserver with smooth pacing & count-up) === */
+const initSkillBars = () => {
+  const skillObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const items = entry.target.querySelectorAll(".skill-item");
+
+          // Deliberate initial pause (400ms) when section enters view
+          setTimeout(() => {
+            items.forEach((item, idx) => {
+              const fill = item.querySelector(".skill-fill");
+              const pctEl = item.querySelector(".skill-pct");
+              if (!fill) return;
+
+              const targetLevel = parseInt(fill.dataset.level || "0", 10);
+              const staggerDelay = idx * 120; // 120ms stagger per skill
+
+              setTimeout(() => {
+                fill.style.transition = "width 1.6s cubic-bezier(0.22, 1, 0.36, 1)";
+                fill.style.width = `${targetLevel}%`;
+                fill.classList.add("animated");
+
+                if (pctEl) {
+                  const duration = 1600;
+                  const startTime = performance.now();
+                  const animatePct = (now) => {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const currentVal = Math.round(eased * targetLevel);
+                    pctEl.textContent = `${currentVal}%`;
+
+                    if (progress < 1) {
+                      requestAnimationFrame(animatePct);
+                    } else {
+                      pctEl.textContent = `${targetLevel}%`;
+                    }
+                  };
+                  requestAnimationFrame(animatePct);
+                }
+              }, staggerDelay);
+            });
+          }, 400);
+
+          skillObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.35, rootMargin: "0px 0px -40px 0px" }
+  );
+
+  document.querySelectorAll(".expertise-category").forEach((cat) => {
+    cat.querySelectorAll(".skill-pct").forEach((el) => {
+      el.textContent = "0%";
+    });
+    skillObserver.observe(cat);
+  });
 };
 
 /* === ROTATING TITLES === */
@@ -525,6 +662,8 @@ const enableNodeInteractions = () => {
 /* === INIT === */
 initTheme();
 initCursor();
+initLenis();
+initHeroTypewriter();
 initCount();
 initSkillBars();
 initRotatingTitles();
