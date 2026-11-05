@@ -549,69 +549,6 @@ body.dark .theme-icon--moon {
     }
 }
 
-.hero-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    font-size: 0.84rem;
-    font-weight: 500;
-    color: #e2e8f0;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    width: fit-content;
-}
-
-.hero-status-pill:hover {
-    transform: translateY(-2px);
-    border-color: rgba(16, 185, 129, 0.5);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.18);
-}
-
-.status-pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 10px #10b981;
-    animation: pulse-beacon 2s infinite ease-in-out;
-}
-
-@keyframes pulse-beacon {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 1;
-        box-shadow: 0 0 8px #10b981;
-    }
-    50% {
-        transform: scale(1.35);
-        opacity: 0.7;
-        box-shadow: 0 0 16px #10b981;
-    }
-}
-
-.wave-emoji {
-    display: inline-block;
-    transform-origin: 70% 70%;
-    animation: wave-animation 2.6s infinite ease-in-out;
-    cursor: default;
-    margin-left: 2px;
-}
-
-@keyframes wave-animation {
-    0%, 60%, 100% { transform: rotate(0deg); }
-    10%, 30% { transform: rotate(14deg); }
-    20% { transform: rotate(-8deg); }
-    40% { transform: rotate(-4deg); }
-    50% { transform: rotate(10deg); }
-}
-
 .headline-dynamic {
     display: inline-block;
     min-height: 1.15em;
