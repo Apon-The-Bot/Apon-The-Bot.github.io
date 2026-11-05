@@ -372,7 +372,7 @@ const initHeroTypewriter = () => {
   const roles = [
     "AI Automation Specialist",
     "Machine Learning Engineer",
-    "Deep Learning Practitioner",
+    "Deep Learning Specialist",
     "n8n Workflow Architect",
     "Scalable Systems Builder"
   ];

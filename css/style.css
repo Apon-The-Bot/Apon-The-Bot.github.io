@@ -489,7 +489,7 @@ body.dark .theme-icon--moon {
 }
 
 .hero-content {
-    max-width: 640px;
+    max-width: 740px;
 }
 
 .hero-label {
@@ -549,17 +549,62 @@ body.dark .theme-icon--moon {
     }
 }
 
+/* Continuous Smooth Gradient Sweep */
+@keyframes continuousGradientSweep {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.headline-first {
+    display: block;
+    white-space: nowrap;
+    font-size: clamp(1.65rem, 2.75vw, 2.95rem);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+}
+
 .headline-dynamic {
-    display: inline-block;
-    min-height: 1.15em;
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+    font-size: clamp(1.65rem, 2.75vw, 2.95rem);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    min-height: 1.2em;
     position: relative;
+}
+
+#hero-typewriter {
+    background: linear-gradient(
+        90deg,
+        #7c6cff 0%,
+        #a855f7 16%,
+        #e1145b 33%,
+        #ff5c7c 50%,
+        #f59e0b 66%,
+        #06b6d4 83%,
+        #7c6cff 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: continuousGradientSweep 6s linear infinite;
+    display: inline-block;
+    white-space: nowrap;
+    font-weight: 800;
+    filter: drop-shadow(0 2px 14px rgba(124, 108, 255, 0.25));
 }
 
 .typewriter-cursor {
     display: inline-block;
     margin-left: 3px;
     font-weight: 300;
-    color: #7c6cff;
+    color: #e1145b;
     animation: cursor-blink 0.8s infinite;
     vertical-align: baseline;
 }
@@ -569,9 +614,21 @@ body.dark .theme-icon--moon {
     50% { opacity: 0; }
 }
 
-.shimmer-text {
-    background-size: 200% 200% !important;
-    animation: gradient-shift 5s ease infinite alternate !important;
+.gradient-text {
+    background: linear-gradient(
+        90deg,
+        #ffffff 0%,
+        #ffe4e8 25%,
+        #ff4d6d 50%,
+        #ffe4e8 75%,
+        #ffffff 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: continuousGradientSweep 8s linear infinite;
+    white-space: nowrap;
 }
 
 
